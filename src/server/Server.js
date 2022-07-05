@@ -1,4 +1,3 @@
-const autoSsl = require('@appsaloon/auto-ssl');
 const {loggerFactory} = require('./logger/log4js');
 const {setupExpressApp} = require('./ExpressApp');
 const MailHandler = require('./handler/MailHandler');
@@ -27,16 +26,8 @@ const apiAuthentication = process.env.AUTHENTICATION
 
 
 
-const enableSsl = process.env.CERT_DOMAINNAMES ? true : false;
-
 const app = setupExpressApp(mailHandler, apiAuthentication, process.env.API_KEY);
 
-if(enableSsl) {
-  autoSsl(app);
-  logger.info('Starting service with letsencrypt.org integration (use https)!');
-} else {
-  const serverPort = 3000;
-  logger.info(`Starting service on port ${serverPort}!`);
-  app.listen(serverPort);
-}
-
+const serverPort = 3000;
+logger.info(`Starting service on port ${serverPort}!`);
+app.listen(serverPort);
